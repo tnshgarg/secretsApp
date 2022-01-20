@@ -3,6 +3,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import encrypt from "mongoose-encryption";
+import "dotenv/config";
 
 //* Initializing express
 const app = express();
@@ -23,11 +24,11 @@ const userSchema = new mongoose.Schema({
   password: String,
 });
 
-//* Secret Key
-const secret = "Thisismysecretyoumotherfuckingidiots.";
-
 //* Plugin
-userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] });
+userSchema.plugin(encrypt, {
+  secret: process.env.SECRET,
+  encryptedFields: ["password"],
+});
 
 //* Models
 const User = new mongoose.model("User", userSchema);
