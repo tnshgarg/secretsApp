@@ -2,7 +2,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import ejs from "ejs";
+import encrypt from "mongoose-encryption";
 
 //* Initializing express
 const app = express();
@@ -18,10 +18,16 @@ mongoose.connect("mongodb://localhost:27017/secretsDB", {
 });
 
 //* Schemas
-const userSchema = {
+const userSchema = new mongoose.Schema({
   email: String,
   password: String,
-};
+});
+
+//* Secret Key
+const secret = "Thisismysecretyoumotherfuckingidiots.";
+
+//* Plugin
+userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] });
 
 //* Models
 const User = new mongoose.model("User", userSchema);
